@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"log"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
@@ -10,7 +11,8 @@ import (
 
 func main() {
 	logger := log.New(log.Writer(), "", 0)
-	adapter := NewTwitchAdapter(logger)
+	client := &http.Client{}
+	adapter := NewTwitchAdapter(client, logger)
 	r := NewRouter(adapter)
 	server := NewHTTPServer(r)
 	service := NewService(server, logger)
