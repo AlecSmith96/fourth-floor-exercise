@@ -1,14 +1,15 @@
-package main
+package rest
 
 import (
 	"log"
 	"net/http"
 	"strconv"
 
+	"github.com/AlecSmith96/fourth-floor-exercise/adapters"
 	"github.com/gin-gonic/gin"
 )
 
-func ViewHandler(c *gin.Context, twitchAdapter *TwitchAdapter) {
+func ViewHandler(c *gin.Context, twitchAdapter *adapters.TwitchAdapter) {
 	channelID := c.Param("channelID")
 	numberOfVideosQueryParam := c.Query("limit")
 

@@ -1,4 +1,4 @@
-package main
+package rest
 
 import (
 	"net/http"
@@ -6,19 +6,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 )
-
-// NewRouter defines a new gin router and routes
-func NewRouter(twitchAdapter *TwitchAdapter) *gin.Engine {
-	router := gin.Default()
-
-	router.Use(gin.Logger())
-
-	router.GET("/videos/:channelID", func(c *gin.Context) {
-		ViewHandler(c, twitchAdapter)
-	})
-	
-	return router
-}
 
 // NewHTTPServer creates the server instance from the router
 func NewHTTPServer(router *gin.Engine) *http.Server {

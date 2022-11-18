@@ -1,4 +1,4 @@
-package main
+package adapters
 
 import (
 	"fmt"
@@ -27,7 +27,7 @@ func (adapter *TwitchAdapter) ObtainAccessToken() *entities.AccessToken {
 }
 
 // https://dev.twitch.tv/docs/api/reference#get-videos
-func (adapter *TwitchAdapter) GetVideosForUser(channelID string, numberOfVideos int) (interface{}, error) {
+func (adapter *TwitchAdapter) GetVideosForUser(channelID string, limit int) (interface{}, error) {
 	accessToken := adapter.ObtainAccessToken()
 	request, err := http.NewRequest("GET", fmt.Sprintf("https://api.twitch.tv/helix/videos?user_id=%s", channelID), nil /* body */)
 	if err != nil {

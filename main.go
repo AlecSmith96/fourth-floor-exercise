@@ -7,14 +7,16 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"github.com/AlecSmith96/fourth-floor-exercise/adapters"
+	"github.com/AlecSmith96/fourth-floor-exercise/rest"
 )
 
 func main() {
 	logger := log.New(log.Writer(), "", 0)
 	client := &http.Client{}
-	adapter := NewTwitchAdapter(client, logger)
-	r := NewRouter(adapter)
-	server := NewHTTPServer(r)
+	adapter := adapters.NewTwitchAdapter(client, logger)
+	r := rest.NewRouter(adapter)
+	server := rest.NewHTTPServer(r)
 	service := NewService(server, logger)
 
 	go func() {
