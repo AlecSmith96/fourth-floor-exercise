@@ -13,7 +13,7 @@ func NewRouter(twitchAdapter *TwitchAdapter) *gin.Engine {
 
 	router.Use(gin.Logger())
 
-	router.GET("/views/:channelID", func(c *gin.Context) {
+	router.GET("/videos/:channelID", func(c *gin.Context) {
 		ViewHandler(c, twitchAdapter)
 	})
 	

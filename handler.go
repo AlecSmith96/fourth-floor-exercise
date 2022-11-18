@@ -10,7 +10,7 @@ import (
 
 func ViewHandler(c *gin.Context, twitchAdapter *TwitchAdapter) {
 	channelID := c.Param("channelID")
-	numberOfVideosQueryParam := c.Query("numVideos")
+	numberOfVideosQueryParam := c.Query("limit")
 
 	numberOfVideos, err := strconv.Atoi(numberOfVideosQueryParam)
 	if err != nil {
