@@ -1,0 +1,8 @@
+rest:
+  port: 8080
+
+
+
+auth:
+  clientId: 
+  clientSecret: 
