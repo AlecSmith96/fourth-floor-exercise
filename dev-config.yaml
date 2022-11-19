@@ -1,8 +1,10 @@
 rest:
   port: 8080
 
-
+logging:
+  loglevel: debug
+  encoding: console # can be console or json
 
 auth:
-  clientId: 
-  clientSecret: 
+  clientId:
+  clientSecret:
