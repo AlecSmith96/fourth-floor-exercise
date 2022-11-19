@@ -1,7 +1,5 @@
 package entities
 
-import "time"
-
 // AccessToken stores a clientID with its corresponding token, used for requests to twitch API
 type AccessToken struct {
 	Token     string `json:"access_token"`
@@ -50,9 +48,9 @@ type Pagination struct {
 // VideoAnalytics response struct for '/videos' endpoint
 type VideoAnalytics struct {
 	SumOfVideoViews       int
-	AverageViewsPerVideo  int
-	SumOfVideoLengths     time.Duration
-	AverageViewsPerMinute float32
+	AverageViewsPerVideo  float64
+	SumOfVideoLengths     string
+	AverageViewsPerMinute float64
 	MostViewedVideo       MostViewedVideo
 }
 

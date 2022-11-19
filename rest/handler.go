@@ -12,7 +12,7 @@ import (
 
 // ViewHandler obtains the data parsed in the request and calls the necessary adapter logic to
 // return the needed data in the response
-func ViewHandler(c *gin.Context, logger *zap.Logger, twitchAdapter adapters.TwitchRequests, analyticsAdapter *adapters.AnalyticsAdapter) {
+func ViewHandler(c *gin.Context, logger *zap.Logger, twitchAdapter adapters.TwitchRequests, analyticsAdapter adapters.AnalyticsCalls) {
 	channelID := c.Param("userID")
 	limit := c.Query("limit")
 
@@ -42,6 +42,7 @@ func ViewHandler(c *gin.Context, logger *zap.Logger, twitchAdapter adapters.Twit
 	analytics, err := analyticsAdapter.GetVideoAnalytics(videos)
 	if err != nil {
 		handlerError(c, err)
+		return
 	}
 
 	c.JSON(http.StatusOK, analytics)

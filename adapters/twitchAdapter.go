@@ -27,7 +27,7 @@ type TwitchAdapter struct {
 // TwitchRequests interface used for easily mocking functionality
 type TwitchRequests interface {
 	ObtainAccessToken(clientID, clientSecret string) (*entities.AccessToken, error)
-	GetVideosForUser(userID string, limit int) ([]*entities.VideoData, error)
+	GetVideosForUser(userID string, limit int) ([]entities.VideoData, error)
 }
 
 // ObtainAccessToken sends oauth request to twitch API to obtain the access token for further requests
@@ -70,7 +70,7 @@ func (adapter *TwitchAdapter) ObtainAccessToken(clientID, clientSecret string) (
 }
 
 // GetVideosForUser queries the Twitch API for the last number of videos specified by the limit parameter
-func (adapter *TwitchAdapter) GetVideosForUser(userID string, limit int) ([]*entities.VideoData, error) {
+func (adapter *TwitchAdapter) GetVideosForUser(userID string, limit int) ([]entities.VideoData, error) {
 	accessToken, err := adapter.ObtainAccessToken(adapter.Auth.ClientID, adapter.Auth.ClientSecret)
 	if err != nil {
 		adapter.Logger.Error("obtaining access token for request", zap.Error(err))
@@ -110,13 +110,7 @@ func (adapter *TwitchAdapter) GetVideosForUser(userID string, limit int) ([]*ent
 		return nil, nil
 	}
 
-	// return slice of pointers to video data
-	var videos []*entities.VideoData
-	for _, video := range videosInResponse.Data {
-		videos = append(videos, &video)
-	}
-
-	return videos, nil
+	return videosInResponse.Data, nil
 }
 
 // handleUnsuccessfulStatus returns correct ResponseError based on status code

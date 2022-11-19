@@ -11,7 +11,7 @@ import (
 )
 
 // NewRouter defines a new gin router and routes
-func NewRouter(config *entities.ConfigRest, logger *zap.Logger, twitchAdapter adapters.TwitchRequests, analyticsAdapter *adapters.AnalyticsAdapter) *gin.Engine {
+func NewRouter(config *entities.ConfigRest, logger *zap.Logger, twitchAdapter adapters.TwitchRequests, analyticsAdapter adapters.AnalyticsCalls) *gin.Engine {
 	gin.SetMode(config.GinMode)
 	router := gin.New()
 
