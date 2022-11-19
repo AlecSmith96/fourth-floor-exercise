@@ -2,13 +2,14 @@ package entities
 
 import "net/http"
 
-// ResponseError struct for returning error from Twitch API
+// ResponseError error struct for returning error from Twitch API
 type ResponseError struct {
 	error
 	Code int
 	PresentableError string
 }
 
+// NewNotFoundError returns an error equivalent to a 404 Not Found HTTP status
 func NewNotFoundError() *ResponseError {
 	return &ResponseError{
 		Code: http.StatusNotFound,
@@ -16,6 +17,7 @@ func NewNotFoundError() *ResponseError {
 	}
 }
 
+// NewUnauthorizedError returns an error equivalent to a 401 Unauthorized HTTP status
 func NewUnauthorizedError() *ResponseError {
 	return &ResponseError{
 		Code: http.StatusUnauthorized,
@@ -23,6 +25,7 @@ func NewUnauthorizedError() *ResponseError {
 	}
 }
 
+// NewBadRequestError returns an error equivalent to a 400 Bad Request HTTP status
 func NewBadRequestError() *ResponseError {
 	return &ResponseError{
 		Code: http.StatusBadRequest,

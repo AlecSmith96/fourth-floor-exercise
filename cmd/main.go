@@ -38,15 +38,17 @@ func main() {
 		panic(err)
 	}
 
+	// start REST server in separate go routine to allow for execution to continue
 	go func() {
 		if err := service.Start(); err != nil {
 			service.Logger.Error("failed to start rest server", zap.Error(err))
 		}
 	}()
 
-	quit := make(chan os.Signal)
+	quit := make(chan os.Signal)	// channel is used to register a system signall used to stop the service
 	signal.Notify(quit, syscall.SIGINT)
 
+	// wait for a Ctrl+C signal before shutting down server
 	<-quit
 	service.Logger.Info("cancel signal registered")
 	if err := service.Shutdown(context.Background()); err != nil {

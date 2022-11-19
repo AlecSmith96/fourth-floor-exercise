@@ -10,23 +10,19 @@ import (
 	"go.uber.org/zap"
 )
 
-// ViewHandler obtains the data parsed in the request and calls the necessary adapter logic to
+// ViewHandler acts as the controller for the videos use case, it obtains the data parsed in the request and calls the necessary adapter logic to
 // return the needed data in the response
 func ViewHandler(c *gin.Context, logger *zap.Logger, twitchAdapter adapters.TwitchRequests, analyticsAdapter adapters.AnalyticsCalls) {
 	channelID := c.Param("userID")
 	limit := c.Query("limit")
 
-	numberOfVideos, err := strconv.Atoi(limit)
-	if err != nil {
-		logger.Warn("invalid query param: %v", zap.Error(err))
-		c.JSON(http.StatusBadRequest, gin.H{
-			"code": "400",
-			"message": "received request with invalid parameters",
-		})
+	if err := validateInputs(channelID, limit, logger); err != nil {
+		logger.Warn("input validation failed: %v", zap.Error(err))
+		handlerError(c, err)
 		return
 	}
 
-	videos, err := twitchAdapter.GetVideosForUser(channelID, numberOfVideos)
+	videos, err := twitchAdapter.GetVideosForUser(channelID, limit)
 	if err != nil {
 		handlerError(c, err)
 		return
@@ -46,6 +42,23 @@ func ViewHandler(c *gin.Context, logger *zap.Logger, twitchAdapter adapters.Twit
 	}
 
 	c.JSON(http.StatusOK, analytics)
+}
+
+// validateInputs ensures the parameters aren't missing and that limit is an integer, otherwise a 400 response is returned
+func validateInputs(channelID, limit string, logger *zap.Logger) error {
+	// ideally would add a string length constraint here for channel id
+	if channelID == "" || limit == "" {
+		logger.Error("inputs missing in request")
+		return entities.NewBadRequestError()
+	}
+
+	_, err := strconv.Atoi(limit)
+	if err != nil {
+		logger.Error("limit input invalid", zap.Error(err))
+		return entities.NewBadRequestError()
+	}
+
+	return nil
 }
 
 // handleError takes the error returned by adapters and returns correct http response

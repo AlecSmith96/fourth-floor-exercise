@@ -1,4 +1,4 @@
-# flourth-floor-exercise
+# fourth-floor-exercise
 
 A simple REST server that provides one endpoint for viewing details about a streamers videos.
 
@@ -32,9 +32,9 @@ By default the service will run on port `8080`, although this is configurable (s
 
 ### Run Using Docker
 
-The application provides convenience make commands for both building the docker image and running it. Configuration for the docker image will be pulled in from the same configuration file used to run it locally. To run the application using Docker:
-* `make docker-build`
-* `make docker-run`
+The application provides convenient make commands for both building the docker image and running it. Configuration for the docker image will be pulled in from the same configuration file when running it locally.
+* `make docker-build` - Builds the image with the tag `ff-exercise`
+* `make docker-run` - Runs the image in detached mode, exposing the default port (8080)
 
 This will build and run the image with the name `ff-exercise`:
 ```
@@ -44,17 +44,17 @@ CONTAINER ID   IMAGE                    COMMAND                  CREATED        
 ```
 
 ## Configuration Instructions
-Configuration is parsed to the service when run through the `--config` argument. All of the configuration points come with default values to allow you to get up and running faster, apart from the `auth` configuration. 
+Configuration can be passed to the service through the `--config` argument. All configuration options come with default values to get you up and running faster, apart from the `auth` configuration. 
 
 Below is a list of the configuration points for the service:
-| Name              | Description |
-| ----------------- | ----------- |
-| `rest.port`         | The port the REST server will run on       |
-| `rest.ginMode`      | The mode the gin logger will run on        |
-| `logging.loglevel`  | The loglevel of the logger        |
-| `logging.encoding`  | How the logger encodes its logs, `console` provides easy to read logs for when running locally in a terminal, `json` wraps all logs in json objects making it more suitable for production.        |
-| `auth.clientId`     | the clientId of the twitch app being used        |
-| `auth.clientSecret` | the clientSecret of the twitch app being used        |
+| Name                | Default Values | Valid Values |  Description |
+| -----------------   | -- | --| ----------- |
+| `rest.port`         | `8080` | `any integer` | The port the REST server will run on       |
+| `rest.ginMode`      | `release` | `release \| debug` | The mode the gin logger will run on        |
+| `logging.loglevel`  | `debug` | `debug \| info` | The loglevel of the logger        |
+| `logging.encoding`  | `console` | `console \| json` | How the logger encodes its logs, `console` provides easy to read logs for when running locally in a terminal, `json` wraps all logs in json objects making it more suitable for production.        |
+| `auth.clientId`     | `""` | `any string` | the clientId of the twitch app being used        |
+| `auth.clientSecret` | `""` | `any string` | the clientSecret of the twitch app being used        |
 
 ## Built With
 * [gin/gonic](https://github.com/gin-gonic/gin) - Provides HTTP router

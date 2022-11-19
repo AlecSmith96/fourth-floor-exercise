@@ -15,7 +15,7 @@ import (
 const (
 	tokenString = `{"client_id": "%s", "client_secret": "%s", "grant_type": "client_credentials"}`
 	tokenURL    = "https://id.twitch.tv/oauth2/token"
-	videosURL   = "https://api.twitch.tv/helix/videos?user_id=%s&first=%d"
+	videosURL   = "https://api.twitch.tv/helix/videos?user_id=%s&first=%s"
 )
 
 type TwitchAdapter struct {
@@ -27,11 +27,12 @@ type TwitchAdapter struct {
 // TwitchRequests interface used for easily mocking functionality
 type TwitchRequests interface {
 	ObtainAccessToken(clientID, clientSecret string) (*entities.AccessToken, error)
-	GetVideosForUser(userID string, limit int) ([]entities.VideoData, error)
+	GetVideosForUser(userID string, limit string) ([]entities.VideoData, error)
 }
 
 // ObtainAccessToken sends oauth request to twitch API to obtain the access token for further requests
 func (adapter *TwitchAdapter) ObtainAccessToken(clientID, clientSecret string) (*entities.AccessToken, error) {
+	// set up request
 	body := fmt.Sprintf(tokenString, clientID, clientSecret)
 	requestBody := []byte(body)
 	request, err := http.NewRequest("POST", tokenURL, bytes.NewBuffer(requestBody))
@@ -53,6 +54,7 @@ func (adapter *TwitchAdapter) ObtainAccessToken(clientID, clientSecret string) (
 
 	defer response.Body.Close()
 
+	// unmarshal response body into struct and return it
 	accessToken := &entities.AccessToken{}
 	responseBody, err := ioutil.ReadAll(response.Body)
 	if err != nil {
@@ -70,13 +72,14 @@ func (adapter *TwitchAdapter) ObtainAccessToken(clientID, clientSecret string) (
 }
 
 // GetVideosForUser queries the Twitch API for the last number of videos specified by the limit parameter
-func (adapter *TwitchAdapter) GetVideosForUser(userID string, limit int) ([]entities.VideoData, error) {
+func (adapter *TwitchAdapter) GetVideosForUser(userID string, limit string) ([]entities.VideoData, error) {
 	accessToken, err := adapter.ObtainAccessToken(adapter.Auth.ClientID, adapter.Auth.ClientSecret)
 	if err != nil {
 		adapter.Logger.Error("obtaining access token for request", zap.Error(err))
 		return nil, err
 	}
 
+	// set up request
 	request, err := http.NewRequest("GET", fmt.Sprintf(videosURL, userID, limit), nil /* body */)
 	if err != nil {
 		adapter.Logger.Error("creating request", zap.Error(err))

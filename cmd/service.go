@@ -10,7 +10,8 @@ import (
 	"github.com/google/wire"
 )
 
-// InitialiseService creates a new Service instance with server and logger
+// InitialiseService creates a new Service instance with server and logger, used by wire to generate the
+// dependency injection file.
 func InitialiseService() (Service, error) {
 	wire.Build(
 		adapters.NewLogger,

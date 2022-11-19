@@ -54,6 +54,7 @@ type VideoAnalytics struct {
 	MostViewedVideo       MostViewedVideo
 }
 
+// MostViewedVideo struct representing the most viewed video returned by the Twitch API
 type MostViewedVideo struct {
 	Title string
 	Views int

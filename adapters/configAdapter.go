@@ -31,11 +31,6 @@ func NewConfig() (*entities.Config, error) {
 		log.Fatalf("error loading file: %v", err)
 	}
 
-	// // load into koanf instance
-	// if err := k.Load(posflag.Provider(f, ".", k), nil); err != nil {
-	// 	log.Fatalf("error loading config: %v", err)
-	// }
-
 	// unmarshal into config struct
 	config := &entities.Config{}
 	err = k.Unmarshal("", config)
