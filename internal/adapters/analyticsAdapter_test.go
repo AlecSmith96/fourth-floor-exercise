@@ -26,18 +26,18 @@ func (s *AnalyticsAdapterTestSuite) TestGetVideoAnalytics_HappyPath() {
 	videos := &entities.Video{
 		Data: []entities.VideoData{
 			{
-				Title: "Video #1",
-				Duration: "1m20s",
+				Title:     "Video #1",
+				Duration:  "1m20s",
 				ViewCount: 156,
 			},
 			{
-				Title: "Video #2",
-				Duration: "1h12m20s",
+				Title:     "Video #2",
+				Duration:  "1h12m20s",
 				ViewCount: 15432,
 			},
 			{
-				Title: "Video #3",
-				Duration: "42m30s",
+				Title:     "Video #3",
+				Duration:  "42m30s",
 				ViewCount: 15432,
 			},
 		},

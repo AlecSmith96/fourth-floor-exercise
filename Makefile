@@ -3,6 +3,10 @@ wire:
 	cd ./cmd \
 	wire
 
+# format all go files
+fmt:
+	go fmt ./internal/...
+
 # build the binary and output to /dist directory
 build:
 	@mkdir -p ./dist

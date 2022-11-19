@@ -66,13 +66,13 @@ func handlerError(c *gin.Context, err error) {
 	switch e := err.(type) {
 	case *entities.ResponseError:
 		c.JSON(e.Code, gin.H{
-			"code": e.Code,
+			"code":    e.Code,
 			"message": e.PresentableError,
 		})
 		return
 	default:
 		c.JSON(http.StatusBadRequest, gin.H{
-			"code": 500,
+			"code":    500,
 			"message": "an internal server error occurred",
 		})
 	}

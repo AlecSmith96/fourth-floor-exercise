@@ -9,7 +9,7 @@ import (
 )
 
 type AnalyticsAdapter struct {
-	Logger     *zap.Logger
+	Logger *zap.Logger
 }
 
 type AnalyticsCalls interface {
@@ -34,16 +34,16 @@ func (adapter *AnalyticsAdapter) GetVideoAnalytics(videos []entities.VideoData) 
 			mostViewedVideo = video
 		}
 	}
-	
-	numMinutes := totalDuration / (1*time.Minute)
+
+	numMinutes := totalDuration / (1 * time.Minute)
 	averageViewsPerMinute := float64(sumOfVideoViews) / float64(numMinutes)
-	averageViewsPerVideo := float64(sumOfVideoViews)/float64(len(videos))
-	
+	averageViewsPerVideo := float64(sumOfVideoViews) / float64(len(videos))
+
 	return &entities.VideoAnalytics{
-		SumOfVideoViews: sumOfVideoViews,
-		AverageViewsPerVideo: math.Round(averageViewsPerVideo*100)/100,
-		SumOfVideoLengths: totalDuration.String(),
-		AverageViewsPerMinute: math.Round(averageViewsPerMinute*100)/100,
+		SumOfVideoViews:       sumOfVideoViews,
+		AverageViewsPerVideo:  math.Round(averageViewsPerVideo*100) / 100,
+		SumOfVideoLengths:     totalDuration.String(),
+		AverageViewsPerMinute: math.Round(averageViewsPerMinute*100) / 100,
 		MostViewedVideo: entities.MostViewedVideo{
 			Title: mostViewedVideo.Title,
 			Views: mostViewedVideo.ViewCount,
@@ -53,10 +53,10 @@ func (adapter *AnalyticsAdapter) GetVideoAnalytics(videos []entities.VideoData) 
 
 func (adapter *AnalyticsAdapter) parseVideoDuration(duration string) (time.Duration, error) {
 	videoDuration, err := time.ParseDuration(duration)
-		if err != nil {
-			adapter.Logger.Error("parsing video duration", zap.Error(err))
-			return time.Duration(0), err
-		}
+	if err != nil {
+		adapter.Logger.Error("parsing video duration", zap.Error(err))
+		return time.Duration(0), err
+	}
 	return videoDuration, nil
 }
 
