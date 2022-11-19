@@ -17,17 +17,18 @@ COPY ./adapters ./adapters
 COPY ./entities ./entities
 COPY ./cmd ./cmd
 COPY ./Makefile ./Makefile
+COPY ./dev-config.yaml ./dev-config.yaml
 
 RUN go mod download
 
 RUN go build -o /build ./cmd/...
 
-# using distroless image for second stage as its very small and doesnt contain anything other 
-# than the binary to run
-FROM gcr.io/distroless/static-debian11 AS run-time
+# # using distroless image for second stage as its very small and doesnt contain anything other 
+# # than the binary to run
+# FROM gcr.io/distroless/static-debian11 AS run-time
 
-COPY --from=build /build /build
+# COPY --from=build /build /build
 
 EXPOSE 8080
 
-CMD [ "/build" ]
+CMD [ "/build", "--config", "dev-config.yaml" ]
