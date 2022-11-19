@@ -18,4 +18,4 @@ docker-build:
 
 # run the docker image
 docker-run:
-	docker run -p 8080:8080 ff-exercise
+	docker run -dp 8080:8080 ff-exercise
