@@ -1,5 +1,6 @@
 rest:
   port: 8080
+  ginMode: release  # can be debug or release
 
 logging:
   loglevel: debug

@@ -29,6 +29,14 @@ func ViewHandler(c *gin.Context, logger *zap.Logger, twitchAdapter adapters.Twit
 	videos, err := twitchAdapter.GetVideosForUser(channelID, numberOfVideos)
 	if err != nil {
 		handlerError(c, err)
+		return
+	}
+
+	if len(videos) == 0 {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "user has no videos to analyse",
+		})
+		return
 	}
 
 	analytics, err := analyticsAdapter.GetVideoAnalytics(videos)
@@ -42,8 +50,8 @@ func ViewHandler(c *gin.Context, logger *zap.Logger, twitchAdapter adapters.Twit
 // handleError takes the error returned by adapters and returns correct http response
 func handlerError(c *gin.Context, err error) {
 	switch e := err.(type) {
-	case entities.ResponseError:
-		c.JSON(http.StatusBadRequest, gin.H{
+	case *entities.ResponseError:
+		c.JSON(e.Code, gin.H{
 			"code": e.Code,
 			"message": e.PresentableError,
 		})

@@ -46,6 +46,11 @@ func (adapter *TwitchAdapter) ObtainAccessToken(clientID, clientSecret string) (
 		adapter.Logger.Error("sending request", zap.Error(err))
 		return nil, err
 	}
+
+	if response.StatusCode != http.StatusOK {
+		return nil, handleUnsuccessfulStatus(response)
+	}
+
 	defer response.Body.Close()
 
 	accessToken := &entities.AccessToken{}
@@ -66,7 +71,7 @@ func (adapter *TwitchAdapter) ObtainAccessToken(clientID, clientSecret string) (
 
 // GetVideosForUser queries the Twitch API for the last number of videos specified by the limit parameter
 func (adapter *TwitchAdapter) GetVideosForUser(userID string, limit int) ([]*entities.VideoData, error) {
-	accessToken, err := adapter.ObtainAccessToken("w0hqi7m18tkpdyuriqtwgv2qtsry9l", "diqrulj5dlw5jg4wcde88xbgy68bez")
+	accessToken, err := adapter.ObtainAccessToken(adapter.Auth.ClientID, adapter.Auth.ClientSecret)
 	if err != nil {
 		adapter.Logger.Error("obtaining access token for request", zap.Error(err))
 		return nil, err
@@ -78,7 +83,7 @@ func (adapter *TwitchAdapter) GetVideosForUser(userID string, limit int) ([]*ent
 		return nil, err
 	}
 	request.Header.Set("Authorization", fmt.Sprintf("Bearer %s", accessToken.Token))
-	request.Header.Set("Client-Id", "w0hqi7m18tkpdyuriqtwgv2qtsry9l")
+	request.Header.Set("Client-Id", adapter.Auth.ClientID)
 
 	response, err := adapter.HTTPClient.Do(request)
 	if err != nil {
@@ -89,7 +94,7 @@ func (adapter *TwitchAdapter) GetVideosForUser(userID string, limit int) ([]*ent
 
 	// if unsuccessful call, return error back to handler
 	if response.Status != "200 OK" {
-		handleUnsuccessfulStatus(response)
+		return nil, handleUnsuccessfulStatus(response)
 	}
 
 	// marshal response into struct
@@ -115,16 +120,16 @@ func (adapter *TwitchAdapter) GetVideosForUser(userID string, limit int) ([]*ent
 }
 
 // handleUnsuccessfulStatus returns correct ResponseError based on status code
-func handleUnsuccessfulStatus(response *http.Response) ([]*entities.VideoData, error) {
-	switch response.Status {
-	case "400 Bad Request":
-		return nil, entities.NewNotFoundError()
-	case "401 Unauthorized":
-		return nil, entities.NewUnauthorizedError()
-	case "404 Not Found":
-		return nil, entities.NewNotFoundError()
+func handleUnsuccessfulStatus(response *http.Response) error {
+	switch response.StatusCode {
+	case http.StatusBadRequest:
+		return entities.NewBadRequestError()
+	case http.StatusUnauthorized:
+		return entities.NewUnauthorizedError()
+	case http.StatusNotFound:
+		return entities.NewNotFoundError()
 	default:
-		return nil, errors.New("Unexpected response status occurred ")
+		return errors.New("Unexpected response status occurred ")
 	}
 }
 

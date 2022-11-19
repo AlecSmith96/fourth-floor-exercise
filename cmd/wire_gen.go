@@ -20,6 +20,7 @@ func InitialiseService() (Service, error) {
 		return Service{}, err
 	}
 	configRest := config.Rest
+	entitiesConfigRest := &config.Rest
 	configLogging := config.Logging
 	logger, err := adapters.NewLogger(configLogging)
 	if err != nil {
@@ -28,7 +29,7 @@ func InitialiseService() (Service, error) {
 	configAuth := config.Auth
 	twitchRequests := adapters.NewTwitchAdapter(logger, configAuth)
 	analyticsAdapter := adapters.NewAnalyticsAdapter(logger)
-	engine := rest.NewRouter(logger, twitchRequests, analyticsAdapter)
+	engine := rest.NewRouter(entitiesConfigRest, logger, twitchRequests, analyticsAdapter)
 	server := rest.NewHTTPServer(configRest, engine)
 	service := Service{
 		Server: server,

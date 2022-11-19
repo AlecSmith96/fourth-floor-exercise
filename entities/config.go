@@ -7,7 +7,8 @@ type Config struct {
 }
 
 type ConfigRest struct {
-	Port string
+	Port    string
+	GinMode string
 }
 
 type ConfigLogging struct {

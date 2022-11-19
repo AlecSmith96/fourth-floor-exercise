@@ -52,6 +52,6 @@ func NewLogger(config entities.ConfigLogging) (*zap.Logger, error) {
 		return nil, err
 	}
 
-	logger.Named("logging").Info("Initialized logging adapter")
+	logger.Info("Initialized logging adapter")
 	return logger, nil
 }
