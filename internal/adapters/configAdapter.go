@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/AlecSmith96/fourth-floor-exercise/entities"
+	"github.com/AlecSmith96/fourth-floor-exercise/internal/entities"
 	"github.com/knadh/koanf"
 	"github.com/knadh/koanf/parsers/yaml"
 	"github.com/knadh/koanf/providers/file"

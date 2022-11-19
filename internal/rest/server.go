@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/AlecSmith96/fourth-floor-exercise/entities"
+	"github.com/AlecSmith96/fourth-floor-exercise/internal/entities"
 	"github.com/gin-gonic/gin"
 )
 

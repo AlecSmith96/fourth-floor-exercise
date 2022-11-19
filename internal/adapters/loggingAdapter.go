@@ -6,7 +6,7 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 
-	"github.com/AlecSmith96/fourth-floor-exercise/entities"
+	"github.com/AlecSmith96/fourth-floor-exercise/internal/entities"
 )
 
 func NewLogger(config entities.ConfigLogging) (*zap.Logger, error) {

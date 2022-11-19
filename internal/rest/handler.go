@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/AlecSmith96/fourth-floor-exercise/adapters"
-	"github.com/AlecSmith96/fourth-floor-exercise/entities"
+	"github.com/AlecSmith96/fourth-floor-exercise/internal/adapters"
+	"github.com/AlecSmith96/fourth-floor-exercise/internal/entities"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )

@@ -7,8 +7,8 @@
 package main
 
 import (
-	"github.com/AlecSmith96/fourth-floor-exercise/adapters"
-	"github.com/AlecSmith96/fourth-floor-exercise/rest"
+	"github.com/AlecSmith96/fourth-floor-exercise/internal/adapters"
+	"github.com/AlecSmith96/fourth-floor-exercise/internal/rest"
 )
 
 // Injectors from service.go:

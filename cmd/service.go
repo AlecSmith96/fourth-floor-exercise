@@ -4,9 +4,9 @@
 package main
 
 import (
-	"github.com/AlecSmith96/fourth-floor-exercise/adapters"
-	"github.com/AlecSmith96/fourth-floor-exercise/entities"
-	"github.com/AlecSmith96/fourth-floor-exercise/rest"
+	"github.com/AlecSmith96/fourth-floor-exercise/internal/adapters"
+	"github.com/AlecSmith96/fourth-floor-exercise/internal/entities"
+	"github.com/AlecSmith96/fourth-floor-exercise/internal/rest"
 	"github.com/google/wire"
 )
 

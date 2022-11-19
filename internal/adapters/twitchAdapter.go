@@ -8,7 +8,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/AlecSmith96/fourth-floor-exercise/entities"
+	"github.com/AlecSmith96/fourth-floor-exercise/internal/entities"
 	"go.uber.org/zap"
 )
 
@@ -29,6 +29,13 @@ type TwitchRequests interface {
 	ObtainAccessToken(clientID, clientSecret string) (*entities.AccessToken, error)
 	GetVideosForUser(userID string, limit string) ([]entities.VideoData, error)
 }
+
+// NEED TO USE THIS TO MOCK THE REQUEST IN UTs
+
+// // HTTPClient used to mock out responses from Twitch
+// type HTTPClient interface {
+// 	Do(req *http.Request) (*http.Response, error)
+// }
 
 // ObtainAccessToken sends oauth request to twitch API to obtain the access token for further requests
 func (adapter *TwitchAdapter) ObtainAccessToken(clientID, clientSecret string) (*entities.AccessToken, error) {

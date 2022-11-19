@@ -3,8 +3,8 @@ package rest
 import (
 	"time"
 
-	"github.com/AlecSmith96/fourth-floor-exercise/adapters"
-	"github.com/AlecSmith96/fourth-floor-exercise/entities"
+	"github.com/AlecSmith96/fourth-floor-exercise/internal/adapters"
+	"github.com/AlecSmith96/fourth-floor-exercise/internal/entities"
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"

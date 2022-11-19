@@ -4,7 +4,7 @@ import (
 	"math"
 	"time"
 
-	"github.com/AlecSmith96/fourth-floor-exercise/entities"
+	"github.com/AlecSmith96/fourth-floor-exercise/internal/entities"
 	"go.uber.org/zap"
 )
 
@@ -26,7 +26,7 @@ func (adapter *AnalyticsAdapter) GetVideoAnalytics(videos []entities.VideoData) 
 		sumOfVideoViews += video.ViewCount
 		videoDuration, err := adapter.parseVideoDuration(video.Duration)
 		if err != nil {
-			adapter.Logger.Error("parsing video duration", zap.Error(err))
+			return nil, err
 		}
 
 		totalDuration += videoDuration

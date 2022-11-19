@@ -8,6 +8,11 @@ build:
 	@mkdir -p ./dist
 	go build -o ./dist ./cmd/...
 
+# generate mocks for go interfaces
+mocks:
+	rm -rf ./mocks
+	mockery --dir=./internal -all -recursive=true -output=./mocks
+
 # run the service locally in the current terminal
 run-service:
 	go run ./cmd --config dev-config.yaml
