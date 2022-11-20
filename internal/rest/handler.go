@@ -71,7 +71,7 @@ func handlerError(c *gin.Context, err error) {
 		})
 		return
 	default:
-		c.JSON(http.StatusBadRequest, gin.H{
+		c.JSON(http.StatusInternalServerError, gin.H{
 			"code":    500,
 			"message": "an internal server error occurred",
 		})
