@@ -17,6 +17,10 @@ mocks:
 	rm -rf ./mocks/
 	mockery --dir=./internal -all -recursive=true -output=./mocks
 
+# run all unit tests
+unit:
+	go test ./internal/...
+
 # run the service locally in the current terminal
 run-service:
 	go run ./cmd --config dev-config.yaml

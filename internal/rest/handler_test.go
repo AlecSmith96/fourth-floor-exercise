@@ -112,6 +112,30 @@ func TestViewHandler_InputValidation_NonIntegerLimitValue(t *testing.T) {
 	assert.Equal(t, "limit input invalid", observedLogs.All()[0].Message)
 }
 
+func TestViewHandler_InputValidation_MissingLimitValue(t *testing.T) {
+	observedZapCore, observedLogs := observer.New(zap.DebugLevel)
+	observedLogger := zap.New(observedZapCore)
+	twitchAdapter := &mocks.TwitchRequests{}
+	analyticsAdapter := &mocks.AnalyticsCalls{}
+	gin.SetMode(gin.TestMode)
+
+    w := httptest.NewRecorder()
+    ctx, _ := gin.CreateTestContext(w)
+    ctx.Request = httptest.NewRequest("GET", "locslhost:8080/videos/1234", nil)
+	ctx.Params = []gin.Param{
+		{
+			Key: "userID",
+			Value: "1234",
+		},
+	}
+
+	rest.ViewHandler(ctx, observedLogger, twitchAdapter, analyticsAdapter)
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	assert.Equal(t, "{\"code\":400,\"message\":\"expected limit query parameter, but received none\"}", w.Body.String())
+	assert.Equal(t, "missing limit query parameter", observedLogs.All()[0].Message)
+}
+
 func TestViewHandler_TwitchAdapterReturnsError(t *testing.T) {
 	observedZapCore, _ := observer.New(zap.DebugLevel)
 	observedLogger := zap.New(observedZapCore)

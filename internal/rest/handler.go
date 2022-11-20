@@ -17,7 +17,6 @@ func ViewHandler(c *gin.Context, logger *zap.Logger, twitchAdapter adapters.Twit
 	limit := c.Query("limit")
 
 	if err := validateInputs(channelID, limit, logger); err != nil {
-		logger.Warn("input validation failed: %v", zap.Error(err))
 		handlerError(c, err)
 		return
 	}
@@ -47,9 +46,17 @@ func ViewHandler(c *gin.Context, logger *zap.Logger, twitchAdapter adapters.Twit
 // validateInputs ensures the parameters aren't missing and that limit is an integer, otherwise a 400 response is returned
 func validateInputs(channelID, limit string, logger *zap.Logger) error {
 	// ideally would add a string length constraint here for channel id
-	if channelID == "" || limit == "" {
+	if channelID == "" {
 		logger.Error("inputs missing in request")
 		return entities.NewBadRequestError()
+	}
+
+	if limit == "" {
+		logger.Error("missing limit query parameter")
+		return &entities.ResponseError{
+			Code: http.StatusBadRequest,
+			PresentableError: "expected limit query parameter, but received none",
+		}
 	}
 
 	_, err := strconv.Atoi(limit)
