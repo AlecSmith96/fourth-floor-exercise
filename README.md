@@ -5,6 +5,8 @@ A simple REST server that provides one endpoint for viewing details about a stre
 ## Table of contents
 * [Getting Started](#getting-started)
 * [Configuration Instructions](#configuration-instructions)
+* [Using The API](#using-the-api)
+* [Built With](#built-with)
 
 ## Getting Started
 
@@ -55,6 +57,36 @@ Below is a list of the configuration points for the service:
 | `logging.encoding`  | `console` | `console \| json` | How the logger encodes its logs, `console` provides easy to read logs for when running locally in a terminal, `json` wraps all logs in json objects making it more suitable for production.        |
 | `auth.clientId`     | `""` | `any string` | the clientId of the twitch app being used        |
 | `auth.clientSecret` | `""` | `any string` | the clientSecret of the twitch app being used        |
+
+## Using the API
+A decription of the available endpoint can be found below:
+
+### Request
+`GET /videos/:userID?limit=3`
+```
+curl -i -H 'Accept: application/json' http://localhost:8080/videos/1234?limit=3
+```
+
+### Response
+```
+HTTP/1.1 200 OK
+Date: Thu, 24 Feb 2011 12:36:30 GMT
+Status: 200 OK
+Connection: close
+Content-Type: application/json
+Content-Length: 2
+
+{
+	"SumOfVideoViews": 53408,
+	"AverageViewsPerVideo": 53408,
+	"SumOfVideoLengths": "1h38m51s",
+	"AverageViewsPerMinute": 544.98,
+	"MostViewedVideo": {
+		"Title": "Lost Ark Midnight Circus TTRPG",
+		"Views": 53408
+	}
+}
+```
 
 ## Built With
 * [gin/gonic](https://github.com/gin-gonic/gin) - Provides HTTP router
