@@ -17,6 +17,7 @@ func InitialiseService() (Service, error) {
 		adapters.NewLogger,
 		adapters.NewConfig,
 		wire.FieldsOf(new(*entities.Config), "Rest", "Logging", "Auth"),
+		adapters.NewHTTPClient,
 		adapters.NewTwitchAdapter,
 		adapters.NewAnalyticsAdapter,
 		rest.NewRouter,

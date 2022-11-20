@@ -13,14 +13,14 @@ import (
 )
 
 const (
-	tokenString = `{"client_id": "%s", "client_secret": "%s", "grant_type": "client_credentials"}`
-	tokenURL    = "https://id.twitch.tv/oauth2/token"
-	videosURL   = "https://api.twitch.tv/helix/videos?user_id=%s&first=%s"
+	TokenString = `{"client_id": "%s", "client_secret": "%s", "grant_type": "client_credentials"}`
+	TokenURL    = "https://id.twitch.tv/oauth2/token"
+	VideosURL   = "https://api.twitch.tv/helix/videos?user_id=%s&first=%s"
 )
 
 type TwitchAdapter struct {
 	Auth       *entities.ConfigAuth
-	HTTPClient *http.Client // ideally this would be swapped out for a separate client that would make the http calls
+	HTTPClient HTTPClient // ideally this would be swapped out for a separate client that would make the http calls
 	Logger     *zap.Logger
 }
 
@@ -30,19 +30,17 @@ type TwitchRequests interface {
 	GetVideosForUser(userID string, limit string) ([]entities.VideoData, error)
 }
 
-// NEED TO USE THIS TO MOCK THE REQUEST IN UTs
-
-// // HTTPClient used to mock out responses from Twitch
-// type HTTPClient interface {
-// 	Do(req *http.Request) (*http.Response, error)
-// }
+// HTTPClient used to mock out responses from Twitch
+type HTTPClient interface {
+	Do(req *http.Request) (*http.Response, error)
+}
 
 // ObtainAccessToken sends oauth request to twitch API to obtain the access token for further requests
 func (adapter *TwitchAdapter) ObtainAccessToken(clientID, clientSecret string) (*entities.AccessToken, error) {
 	// set up request
-	body := fmt.Sprintf(tokenString, clientID, clientSecret)
+	body := fmt.Sprintf(TokenString, clientID, clientSecret)
 	requestBody := []byte(body)
-	request, err := http.NewRequest("POST", tokenURL, bytes.NewBuffer(requestBody))
+	request, err := http.NewRequest("POST", TokenURL, bytes.NewBuffer(requestBody))
 	if err != nil {
 		adapter.Logger.Error("obtaining access token", zap.Error(err))
 		return nil, err
@@ -82,12 +80,11 @@ func (adapter *TwitchAdapter) ObtainAccessToken(clientID, clientSecret string) (
 func (adapter *TwitchAdapter) GetVideosForUser(userID string, limit string) ([]entities.VideoData, error) {
 	accessToken, err := adapter.ObtainAccessToken(adapter.Auth.ClientID, adapter.Auth.ClientSecret)
 	if err != nil {
-		adapter.Logger.Error("obtaining access token for request", zap.Error(err))
 		return nil, err
 	}
 
 	// set up request
-	request, err := http.NewRequest("GET", fmt.Sprintf(videosURL, userID, limit), nil /* body */)
+	request, err := http.NewRequest("GET", fmt.Sprintf(VideosURL, userID, limit), nil /* body */)
 	if err != nil {
 		adapter.Logger.Error("creating request", zap.Error(err))
 		return nil, err
@@ -112,18 +109,19 @@ func (adapter *TwitchAdapter) GetVideosForUser(userID string, limit string) ([]e
 	responseBody, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		adapter.Logger.Error("response body", zap.Error(err))
-		return nil, nil
+		return nil, err
 	}
 	err = json.Unmarshal(responseBody, videosInResponse)
 	if err != nil {
 		adapter.Logger.Error("unmarshalling response body", zap.Error(err))
-		return nil, nil
+		return nil, err
 	}
 
 	return videosInResponse.Data, nil
 }
 
-// handleUnsuccessfulStatus returns correct ResponseError based on status code
+// handleUnsuccessfulStatus returns correct ResponseError based on status code,
+// known status codes are specified in API documentation
 func handleUnsuccessfulStatus(response *http.Response) error {
 	switch response.StatusCode {
 	case http.StatusBadRequest:
@@ -137,9 +135,13 @@ func handleUnsuccessfulStatus(response *http.Response) error {
 	}
 }
 
-func NewTwitchAdapter(logger *zap.Logger, config entities.ConfigAuth) TwitchRequests {
+func NewHTTPClient() HTTPClient {
+	return &http.Client{}
+}
+
+func NewTwitchAdapter(logger *zap.Logger, config entities.ConfigAuth, httpClient HTTPClient) TwitchRequests {
 	return &TwitchAdapter{
-		HTTPClient: &http.Client{},
+		HTTPClient: httpClient,
 		Auth:       &config,
 		Logger:     logger.Named("twitchAdapter"),
 	}

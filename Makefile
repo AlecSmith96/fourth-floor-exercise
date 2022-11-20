@@ -1,6 +1,6 @@
 # generate wire dependency injection file
 wire:
-	cd ./cmd \
+	cd ./cmd; \
 	wire
 
 # format all go files
@@ -14,7 +14,7 @@ build:
 
 # generate mocks for go interfaces
 mocks:
-	rm -rf ./mocks
+	rm -rf ./mocks/
 	mockery --dir=./internal -all -recursive=true -output=./mocks
 
 # run the service locally in the current terminal

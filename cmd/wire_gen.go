@@ -13,7 +13,8 @@ import (
 
 // Injectors from service.go:
 
-// InitialiseService creates a new Service instance with server and logger
+// InitialiseService creates a new Service instance with server and logger, used by wire to generate the
+// dependency injection file.
 func InitialiseService() (Service, error) {
 	config, err := adapters.NewConfig()
 	if err != nil {
@@ -27,7 +28,8 @@ func InitialiseService() (Service, error) {
 		return Service{}, err
 	}
 	configAuth := config.Auth
-	twitchRequests := adapters.NewTwitchAdapter(logger, configAuth)
+	httpClient := adapters.NewHTTPClient()
+	twitchRequests := adapters.NewTwitchAdapter(logger, configAuth, httpClient)
 	analyticsCalls := adapters.NewAnalyticsAdapter(logger)
 	engine := rest.NewRouter(entitiesConfigRest, logger, twitchRequests, analyticsCalls)
 	server := rest.NewHTTPServer(configRest, engine)
