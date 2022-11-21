@@ -18,8 +18,14 @@ mocks:
 	mockery --dir=./internal -all -recursive=true -output=./mocks
 
 # run all unit tests
+# Ideally would also add calculation for total code coverage which would be printed to console
 unit:
 	go test ./internal/...
+
+# Ideally we would also have a `make functional` make target here to run
+# a set of functional tests that would test end to end functionality and 
+# help catch integration issues between other services and APIs being used.
+# due to time constraints I was unable to do this.
 
 # run the service locally in the current terminal
 run-service:
