@@ -9,6 +9,7 @@ import (
 	"github.com/AlecSmith96/fourth-floor-exercise/internal/entities"
 )
 
+// NewLogger creates a new zap logger instance and returns it
 func NewLogger(config entities.ConfigLogging) (*zap.Logger, error) {
 	// get loglevel from config
 	level := zap.NewAtomicLevel()

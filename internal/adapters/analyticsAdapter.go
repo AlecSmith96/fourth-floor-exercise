@@ -12,6 +12,7 @@ type AnalyticsAdapter struct {
 	Logger *zap.Logger
 }
 
+// AnalyticsCalls interface used for easily mocking functionality
 type AnalyticsCalls interface {
 	GetVideoAnalytics(videos []entities.VideoData) (*entities.VideoAnalytics, error)
 }
